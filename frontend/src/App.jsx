@@ -10,21 +10,42 @@ import Login from './pages/Login.jsx'
 import SearchPage from './pages/SearchPage.jsx'
 import Chatbot from './components/Chatbot.jsx'
 
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+
 function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/filter" element={<SearchPage />} />
-        <Route path="/:id" element={<InfoPage />} />
-        <Route path="/admin" element={<AdminHomePage />} />
-        <Route path="/admin/:id" element={<AdminUpdatePage />} />
-        <Route path="admin/create" element={<AdminCreatePage />} />
-        <Route path="/users/signup" element={<SignUp />} />
-        <Route path="/users/login" element={<Login />} />
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-      <Chatbot />
-    </div>
+    <AuthProvider>
+      <div>
+        <Routes>
+          <Route path="/filter" element={<SearchPage />} />
+          <Route path="/:id" element={<InfoPage />} />
+
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminHomePage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/:id" element={
+            <ProtectedRoute>
+              <AdminUpdatePage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="admin/create" element={
+            <ProtectedRoute>
+              <AdminCreatePage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/users/signup" element={<SignUp />} />
+          <Route path="/users/login" element={<Login />} />
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+        <Chatbot />
+      </div>
+    </AuthProvider>
   )
 }
 

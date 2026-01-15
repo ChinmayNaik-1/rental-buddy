@@ -7,52 +7,53 @@ import { Link } from "react-router";
 import Footer from "../components/Footer";
 
 
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
+
 const InfoPage = () => {
-  const {id} = useParams();
+  const { id } = useParams();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
-  const [card,setCard] = useState(null)
-  const [loading,setLoading] = useState(true)
-  const [ischanged,setIsChanged] = useState(false)
+  const [card, setCard] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [ischanged, setIsChanged] = useState(false)
 
-  useEffect( ()=>{
-    const fetchall = async() => {
+  useEffect(() => {
+    const fetchall = async () => {
       try {
-        const res=await axios.get(`https://bknd-4.onrender.com/${id}`);
+        const res = await axios.get(`https://bknd-4.onrender.com/${id}`);
         setCard(res.data)                                                         //pe
       } catch (error) {
         toast.error("errro getting card")
       }
-      finally{
+      finally {
         setLoading(false)
       }
     }
-    
-    fetchall()
-  },[id])
 
-  const handlesubmit = async() => {
+    fetchall()
+  }, [id])
+
+  const handlesubmit = async () => {
     try {
-      await axios.put(`https://bknd-4.onrender.com/${id}`,card);
-      if(ischanged)
-      {
+      await axios.put(`https://bknd-4.onrender.com/${id}`, card);
+      if (ischanged) {
         toast.success("Your Vehicle Has Been Booked")
       }
-      else{
-        
+      else {
+
       }
     } catch (error) {
       toast.error("could not update")
     }
   }
 
-  if (loading)
-  {
+  if (loading) {
     return (<div>loading...</div>);
   }
-  
 
-
-   return (
+  return (
     <div className="min-h-screen p-6">
       <Link to="/filter" className="btn mb-4">Back</Link>
 
@@ -77,16 +78,20 @@ const InfoPage = () => {
             <b>Price:</b> ₹{card.price}
           </p>
 
-          <button className={`btn max-w-30 mx-auto p-5 ${card.booked ? "bg-red-500":"bg-green-500"}`}
-          value={card.booked? "true":"false"}
-          onClick={()=>{
-            if(!card.booked)
-            {
-              setCard({...card,booked:true})
-              setIsChanged(true);
-            }
-          }}>  {/* here */}
-            {card.booked ? "BOOKED":"Available"}
+          <button className={`btn max-w-30 mx-auto p-5 ${card.booked ? "bg-red-500" : "bg-green-500"}`}
+            value={card.booked ? "true" : "false"}
+            onClick={() => {
+              if (!isLoggedIn) {
+                toast.error("Please login to book a vehicle");
+                navigate("/users/login");
+                return;
+              }
+              if (!card.booked) {
+                setCard({ ...card, booked: true })
+                setIsChanged(true);
+              }
+            }}>  {/* here */}
+            {card.booked ? "BOOKED" : "Available"}
           </button>
 
           <button onClick={handlesubmit}>
@@ -94,9 +99,9 @@ const InfoPage = () => {
           </button>
         </div>
       </div>
-        <div className="fixed bottom-0 left-0 w-full bg-black py-6">
-          <Footer/>
-        </div>
+      <div className="fixed bottom-0 left-0 w-full bg-black py-6">
+        <Footer />
+      </div>
     </div>
   );
 };
