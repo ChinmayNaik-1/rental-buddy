@@ -8,6 +8,7 @@ import AdminCreatePage from './pages/AdminCreatePage.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Login from './pages/Login.jsx'
 import Search from './pages/Search.jsx'
+import Chatbot from './components/Chatbot.jsx'
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
         <Route path="/:id" element={<InfoPage />} />
         <Route path="/admin" element={<AdminHomePage />} />
         <Route path="/admin/:id" element={<AdminUpdatePage />} />
-        <Route path="admin/create" element={<AdminCreatePage/>}/>
-        <Route path="/users/signup" element={<SignUp/>} />
-        <Route path="/users/login" element={<Login/>} />
-        <Route path="/" element={<Search/>} />
+        <Route path="admin/create" element={<AdminCreatePage />} />
+        <Route path="/users/signup" element={<SignUp />} />
+        <Route path="/users/login" element={<Login />} />
+        <Route path="/" element={<Search />} />
       </Routes>
+      <Chatbot />
     </div>
   )
 }
