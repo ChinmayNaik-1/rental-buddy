@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { findBestMatch } from './chatbotData';
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -6,6 +7,16 @@ const Chatbot = () => {
         { text: "Hello! How can I help you regarding your rental needs today?", sender: "bot" }
     ]);
     const [inputValue, setInputValue] = useState("");
+
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const toggleChat = () => {
         setIsOpen(!isOpen);
@@ -15,20 +26,22 @@ const Chatbot = () => {
         e.preventDefault();
         if (inputValue.trim() === "") return;
 
-        setMessages([...messages, { text: inputValue, sender: "user" }]);
+        setMessages(prev => [...prev, { text: inputValue, sender: "user" }]);
+        const userQuestion = inputValue;
         setInputValue("");
 
-        // Simulate bot response
+        // Simulate bot response with local data
         setTimeout(() => {
-            setMessages(prev => [...prev, { text: "I'm just a demo bot for now, but I'm here to help!", sender: "bot" }]);
-        }, 1000);
+            const response = findBestMatch(userQuestion);
+            setMessages(prev => [...prev, { text: response, sender: "bot" }]);
+        }, 600);
     };
 
     return (
         <>
             <div className={`fixed bottom-4 right-4 z-50`}>
                 <button
-                    className="btn btn-circle btn-lg btn-primary shadow-lg transition-transform hover:scale-110"
+                    className="btn btn-circle btn-lg border-2 border-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 hover:rotate-12"
                     onClick={toggleChat}
                 >
                     {isOpen ? (
@@ -46,7 +59,7 @@ const Chatbot = () => {
             {isOpen && (
                 <div className="fixed bottom-24 right-4 z-50 w-80 md:w-96 bg-base-100 shadow-2xl rounded-2xl border border-base-200 overflow-hidden flex flex-col h-[500px] animate-fade-in-up">
                     {/* Header */}
-                    <div className="bg-primary text-primary-content p-4 flex justify-between items-center">
+                    <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white p-4 flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <div className="avatar online">
                                 <div className="w-10 rounded-full bg-base-100 p-0.5">
