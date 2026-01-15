@@ -13,6 +13,9 @@ import Chatbot from './components/Chatbot.jsx'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 
+import AboutUs from './pages/AboutUs.jsx'
+import ContactUs from './pages/ContactUs.jsx'
+
 function App() {
   return (
     <AuthProvider>
@@ -41,6 +44,8 @@ function App() {
 
           <Route path="/users/signup" element={<SignUp />} />
           <Route path="/users/login" element={<Login />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/" element={<HomePage />} />
         </Routes>
         <Chatbot />
