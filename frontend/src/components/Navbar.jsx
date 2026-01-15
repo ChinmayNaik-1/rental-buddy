@@ -10,10 +10,10 @@ const Navbar = () => {
 
   return (
     <div className="w-full bg-gray-800 border-b px-4 py-3 flex items-center justify-between">
-      
+
       {/* Left */}
       <div className="text-3xl font-extrabold tracking-widest text-yellow-400">
-        BIKEBRO
+        RENTAL BUDDY
       </div>
 
       {/* Right */}

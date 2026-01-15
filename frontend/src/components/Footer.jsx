@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
 
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">BikeBro</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">Rental Buddy</h2>
           <p className="text-gray-400">
             Rent bikes easily, anywhere, anytime. Your journey, your way.
           </p>
@@ -31,7 +31,7 @@ const Footer = () => {
             <a href="#" className="hover:text-blue-700 transition"><FaLinkedinIn /></a>
           </div>
           <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} BikeBro. All rights reserved.
+            &copy; {new Date().getFullYear()} Rental Buddy. All rights reserved.
           </p>
         </div>
 
