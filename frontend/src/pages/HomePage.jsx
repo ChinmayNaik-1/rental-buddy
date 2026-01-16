@@ -88,8 +88,14 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {vehicles.map((vehicle) => (
-            <div key={vehicle._id} className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group">
+          {vehicles.slice(0, 4).map((vehicle, index) => (
+            <div
+              key={vehicle._id}
+              className={`bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group 
+                ${index > 0 ? 'hidden md:block' : ''} 
+                ${index > 1 ? 'md:hidden lg:block' : ''}
+              `}
+            >
               <div className="relative h-48 overflow-hidden bg-gray-100">
                 <img
                   src={vehicle.images[0] || "https://via.placeholder.com/400x250"}
