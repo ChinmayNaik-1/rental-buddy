@@ -22,7 +22,7 @@ const AboutUs = () => {
                         <div className="text-6xl text-gray-200 font-bold mb-4">01</div>
                         <h2 className="text-3xl font-bold mb-4 text-primary">The beautiful beginning</h2>
                         <p className="text-lg text-gray-600 leading-relaxed">
-                            We procured the 1st license and decided to change the way Bike rentals worked in India.
+                            We procured the 1st license and decided to change the way Vehicle rentals worked in India.
                             With 5 motorcycles and a pocket full of confidence, the journey started to make mobility accessible to everyone.
                         </p>
                     </div>
@@ -38,7 +38,7 @@ const AboutUs = () => {
                         <h2 className="text-3xl font-bold mb-4 text-secondary">Achieving milestones</h2>
                         <p className="text-lg text-gray-600 leading-relaxed">
                             It was not long before we shifted gears and included scooters to our fleet, becoming the single largest fleet owner
-                            of rental bikes. We introduced a wide range of motorcycles to serve every rider's need.
+                            of rental vehicles. We introduced a wide range of motorcycles to serve every rider's need.
                         </p>
                     </div>
                     <div className="flex-1">

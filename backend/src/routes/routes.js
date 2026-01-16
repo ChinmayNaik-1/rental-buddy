@@ -11,7 +11,8 @@ import {
     getMyVehicles,
     getVehicleById,
     updateVehicle,
-    deleteVehicle
+    deleteVehicle,
+    getLocations
 } from "../controllers/vehicleController.js";
 import {
     bookVehicle,
@@ -36,6 +37,7 @@ routes.put("/auth/profile", protect, updateProfile);
 // Vehicle Routes
 routes.get("/vehicles", getAvailableVehicles); // Public
 routes.get("/vehicles/my-listings", protect, getMyVehicles);
+routes.get("/vehicles/locations", getLocations); // Public, must be before :id
 routes.get("/vehicles/:id", getVehicleById); // Public/Protected
 routes.post("/vehicles", protect, validate(vehicleSchema), createVehicle);
 routes.put("/vehicles/:id", protect, updateVehicle);

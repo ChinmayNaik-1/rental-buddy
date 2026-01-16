@@ -9,7 +9,7 @@ const Footer = () => {
         <div>
           <h2 className="text-2xl font-bold text-white mb-3">Rental Buddy</h2>
           <p className="text-gray-400">
-            Rent bikes easily, anywhere, anytime. Your journey, your way.
+            Rent vehicles easily, anywhere, anytime. Your journey, your way.
           </p>
         </div>
 

@@ -43,10 +43,10 @@ const HomePage = () => {
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center">
           <div className="max-w-2xl text-white mb-10">
             <h1 className="text-6xl font-extrabold mb-4 leading-tight tracking-tight">
-              Bike Rentals <br /> <span className="text-yellow-400">Made Easy</span>
+              Vehicle Rentals <br /> <span className="text-yellow-400">Made Easy</span>
             </h1>
             <p className="text-xl text-gray-200 font-light mb-8">
-              Choose from a wide range of bikes for your daily commute or weekend getaway.
+              Choose from a wide range of vehicles for your daily commute or weekend getaway.
               Standard rates, no hidden charges.
             </p>
           </div>
@@ -54,12 +54,12 @@ const HomePage = () => {
           {/* Search Widget Overlay */}
           <div className="bg-white p-6 rounded-lg shadow-2xl max-w-4xl grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div className="md:col-span-3">
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Search City or Bike</label>
+              <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Search City or Vehicle</label>
               <div className="flex items-center border border-gray-300 rounded p-3 bg-gray-50 focus-within:ring-2 focus-within:ring-yellow-400">
                 <span className="text-gray-400 mr-2">📍</span>
                 <input
                   type="text"
-                  placeholder="Search for bikes (e.g. Classic 350)"
+                  placeholder="Search for vehicles (e.g. Classic 350)"
                   className="bg-transparent w-full focus:outline-none text-gray-800 font-semibold"
                   onChange={(e) => setsearch(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handlesearch(e)}
@@ -82,7 +82,7 @@ const HomePage = () => {
         <div className="flex justify-between items-end mb-10 border-b pb-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Our Fleet</h2>
-            <p className="text-gray-500 mt-2">Choose from our diverse collection of well-maintained bikes</p>
+            <p className="text-gray-500 mt-2">Choose from our diverse collection of well-maintained vehicles</p>
           </div>
           <Link to="/filter" className="text-blue-600 font-semibold hover:text-blue-800 flex items-center">
             View All <span className="ml-2">→</span>
@@ -141,7 +141,7 @@ const HomePage = () => {
             <div className="text-5xl mb-6">🛡️</div>
             <h3 className="text-xl font-bold mb-3 text-white">Safe & Sanitized</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              All bikes are sanitized before every ride for your safety. We prioritize hygiene standards.
+              All vehicles are sanitized before every ride for your safety. We prioritize hygiene standards.
             </p>
           </div>
 

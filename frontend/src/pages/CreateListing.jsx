@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
@@ -11,6 +11,14 @@ const CreateListing = () => {
         price: '',
         image: '' // Single image URL for simplicity
     });
+
+    const [locations, setLocations] = useState([]);
+
+    useEffect(() => {
+        api.get('/vehicles/locations')
+            .then(res => setLocations(res.data))
+            .catch(err => console.error("Failed to fetch locations", err));
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,14 +51,19 @@ const CreateListing = () => {
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                     required
                 />
-                <input
-                    type="text"
-                    placeholder="Location"
-                    className="w-full border p-2 rounded"
+
+                <select
+                    className="w-full border p-2 rounded bg-white"
                     value={formData.location}
                     onChange={e => setFormData({ ...formData, location: e.target.value })}
                     required
-                />
+                >
+                    <option value="">Select Location</option>
+                    {locations.map(loc => (
+                        <option key={loc} value={loc}>{loc}</option>
+                    ))}
+                </select>
+
                 <input
                     type="number"
                     placeholder="Price per day"

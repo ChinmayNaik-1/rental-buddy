@@ -36,7 +36,7 @@ export const faqData = [
     },
     {
         question: "Are helmets and safety gear provided?",
-        answer: "Yes, helmets and safety gear are provided per person per bike. Additional gear may be charged extra.",
+        answer: "Yes, helmets and safety gear are provided per person per vehicle. Additional gear may be charged extra.",
         keywords: ["helmet", "safety", "gear", "protection"]
     },
     {

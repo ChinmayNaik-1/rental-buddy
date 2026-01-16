@@ -9,6 +9,7 @@ import Chatbot from './components/Chatbot.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import CreateListing from './pages/CreateListing.jsx'
 import UpdateListing from './pages/UpdateListing.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -43,6 +44,12 @@ function App() {
           <Route path="/edit-listing/:id" element={
             <ProtectedRoute>
               <UpdateListing />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           } />
 

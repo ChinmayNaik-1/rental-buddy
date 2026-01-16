@@ -1,4 +1,9 @@
-import Vehicle from "../models/Vehicle.js";
+import Vehicle, { ALLOWED_LOCATIONS } from "../models/Vehicle.js";
+
+// Public: Get allowed locations
+export async function getLocations(req, res) {
+    res.status(200).json(ALLOWED_LOCATIONS);
+}
 
 // Public: Get all available vehicles
 export async function getAvailableVehicles(req, res) {
