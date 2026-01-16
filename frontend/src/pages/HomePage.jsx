@@ -27,9 +27,7 @@ const HomePage = () => {
 
   const handlesearch = (e) => {
     e.preventDefault();
-    if (search.trim()) {
-      navigate(`/filter?search=${search}`);
-    }
+    navigate(`/filter?search=${search}`);
   }
 
   return (

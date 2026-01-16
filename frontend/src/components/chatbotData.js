@@ -1,5 +1,10 @@
 export const faqData = [
     {
+        question: "Hi",
+        answer: "👋 Hi there! Welcome to Rental Buddy 🚗✨\n\nI’m here to help you rent vehicles easily and hassle-free. You can ask me about:\n• Available vehicles\n• Rental prices\n• Locations\n• Booking process\n• Documents required\n• Policies & support\n\nJust type your question and I’ll take care of the rest 😊",
+        keywords: ["hi", "hello", "hey", "start", "greeting"]
+    },
+    {
         question: "Who is eligible to rent a vehicle from your platform?",
         answer: "Anyone who is 18 years or older, holds a valid driving license, and can provide proper identification documents is eligible to rent a vehicle from our platform.",
         keywords: ["eligible", "eligibility", "age", "who can rent", "requirements"]
