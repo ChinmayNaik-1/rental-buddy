@@ -16,9 +16,12 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AboutUs from './pages/AboutUs.jsx'
 import ContactUs from './pages/ContactUs.jsx'
 
+import ScrollToTop from './components/ScrollToTop.jsx'
+
 function App() {
   return (
     <AuthProvider>
+      <ScrollToTop />
       <div>
         <Routes>
           <Route path="/" element={<HomePage />} />

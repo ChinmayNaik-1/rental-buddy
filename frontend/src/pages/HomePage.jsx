@@ -19,7 +19,9 @@ const HomePage = () => {
       const res = await api.get("/vehicles");
       setVehicles(res.data.filter(v => !v.isDeleted));
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch vehicles:", error);
+      setVehicles([]); // Ensure state is cleared on error
+      toast.error("Could not load vehicles");
     }
   };
 
@@ -132,22 +134,31 @@ const HomePage = () => {
       </div>
 
       {/* Features / Why Choose Us */}
+      {/* Features / Why Choose Us */}
       <div className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="p-6">
-            <div className="text-4xl mb-4">🛡️</div>
-            <h3 className="text-xl font-bold mb-2">Safe & Sanitized</h3>
-            <p className="text-gray-400">All bikes are sanitized before every ride for your safety.</p>
+          <div className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:-translate-y-2 transition-transform duration-300">
+            <div className="text-5xl mb-6">🛡️</div>
+            <h3 className="text-xl font-bold mb-3 text-white">Safe & Sanitized</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              All bikes are sanitized before every ride for your safety. We prioritize hygiene standards.
+            </p>
           </div>
-          <div className="p-6">
-            <div className="text-4xl mb-4">🚀</div>
-            <h3 className="text-xl font-bold mb-2">Fast Booking</h3>
-            <p className="text-gray-400">Book your ride in less than 2 minutes with our seamless process.</p>
+
+          <div className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:-translate-y-2 transition-transform duration-300">
+            <div className="text-5xl mb-6">🚀</div>
+            <h3 className="text-xl font-bold mb-3 text-white">Fast Booking</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Book your ride in less than 2 minutes with our seamless process. No paperwork hassles.
+            </p>
           </div>
-          <div className="p-6">
-            <div className="text-4xl mb-4">💰</div>
-            <h3 className="text-xl font-bold mb-2">Transparent Pricing</h3>
-            <p className="text-gray-400">No hidden charges. What you see is what you pay.</p>
+
+          <div className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:-translate-y-2 transition-transform duration-300">
+            <div className="text-5xl mb-6">🎧</div>
+            <h3 className="text-xl font-bold mb-3 text-white">24x7 Service</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              We are available round the clock to assist you with your queries and road side assistance.
+            </p>
           </div>
         </div>
       </div>

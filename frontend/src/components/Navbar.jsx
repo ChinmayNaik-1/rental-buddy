@@ -17,7 +17,11 @@ const Navbar = () => {
     <div className="w-full bg-gray-800 border-b px-4 py-3 flex items-center justify-between shadow-md">
 
       {/* Left */}
-      <Link to="/" className="text-3xl font-extrabold tracking-widest text-yellow-400 hover:text-yellow-300 transition">
+      <Link
+        to="/"
+        onClick={() => window.scrollTo(0, 0)}
+        className="text-3xl font-extrabold tracking-widest text-yellow-400 hover:text-yellow-300 transition"
+      >
         RENTAL BUDDY
       </Link>
 
@@ -27,6 +31,7 @@ const Navbar = () => {
           <>
             <Link
               to="/users/login"
+              onClick={() => window.scrollTo(0, 0)}
               className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transiton-all duration-200 transform hover:scale-105"
             >
               Login
@@ -34,6 +39,7 @@ const Navbar = () => {
 
             <Link
               to="/users/signup"
+              onClick={() => window.scrollTo(0, 0)}
               className="px-4 py-2 font-semibold text-blue-600 border border-blue-600 rounded-lg bg-white hover:bg-blue-50 transition-colors"
             >
               Sign up
@@ -43,6 +49,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/dashboard"
+              onClick={() => window.scrollTo(0, 0)}
               className="font-semibold text-gray-200 hover:text-white"
             >
               My Dashboard

@@ -35,6 +35,11 @@ const Dashboard = () => {
         } catch (error) {
             console.error("Error fetching data", error);
             toast.error("Failed to load dashboard data");
+            // Clear state on error to prevent stale data
+            setListings([]);
+            setActiveRentals([]);
+            setHistory([]);
+            setIncomingBookings([]);
         }
     };
 
