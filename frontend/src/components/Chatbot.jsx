@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { findBestMatch } from './chatbotData';
+import botImage from '../assets/chatbot.jpg';
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -62,8 +63,8 @@ const Chatbot = () => {
                     <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white p-4 flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <div className="avatar online">
-                                <div className="w-10 rounded-full bg-base-100 p-0.5">
-                                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Bot" />
+                                <div className="w-10 h-10 rounded-full bg-base-100 p-0.5 flex items-center justify-center overflow-hidden">
+                                    <img src={botImage} alt="Bot" className="w-full h-full object-cover rounded-full" />
                                 </div>
                             </div>
                             <div>
