@@ -1,14 +1,14 @@
 import './App.css'
 import { Routes, Route } from "react-router"
-import AdminHomePage from './pages/AdminHomePage'
-import AdminUpdatePage from './pages/AdminUpdatePage'
 import HomePage from './pages/HomePage.jsx'
 import InfoPage from './pages/InfoPage'
-import AdminCreatePage from './pages/AdminCreatePage.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Login from './pages/Login.jsx'
 import SearchPage from './pages/SearchPage.jsx'
 import Chatbot from './components/Chatbot.jsx'
+import Dashboard from './pages/Dashboard.jsx'
+import CreateListing from './pages/CreateListing.jsx'
+import UpdateListing from './pages/UpdateListing.jsx'
 
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -21,24 +21,25 @@ function App() {
     <AuthProvider>
       <div>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/filter" element={<SearchPage />} />
           <Route path="/:id" element={<InfoPage />} />
 
-          <Route path="/admin" element={
+          <Route path="/dashboard" element={
             <ProtectedRoute>
-              <AdminHomePage />
+              <Dashboard />
             </ProtectedRoute>
           } />
 
-          <Route path="/admin/:id" element={
+          <Route path="/create-listing" element={
             <ProtectedRoute>
-              <AdminUpdatePage />
+              <CreateListing />
             </ProtectedRoute>
           } />
 
-          <Route path="admin/create" element={
+          <Route path="/edit-listing/:id" element={
             <ProtectedRoute>
-              <AdminCreatePage />
+              <UpdateListing />
             </ProtectedRoute>
           } />
 
@@ -46,7 +47,6 @@ function App() {
           <Route path="/users/login" element={<Login />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/" element={<HomePage />} />
         </Routes>
         <Chatbot />
       </div>

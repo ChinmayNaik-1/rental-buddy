@@ -1,74 +1,69 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { Link } from "react-router";
-import { useNavigate } from "react-router";
-import Footer from "../components/Footer";
-
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("")
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    phoneNumber: "",
+    password: ""
+  });
+
+  // Clear any existing token on mount to prevent weird states
+  useState(() => {
+    localStorage.removeItem("token");
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (!name.trim() || !password.trim()) {
-        toast.error("fill all feilds")
-      }
-      const res = await axios.post(`https://bknd-4.onrender.com/user/login`, { name, password })
-      login(res.data.token);
-      toast.success('you are now logged in')
-      navigate("/admin")
+      await login(formData);
+      toast.success("Login Successful!");
+      navigate("/dashboard");
     } catch (error) {
-      toast.error("no such user")
+      toast.error(error.response?.data?.message || "Login failed");
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-500">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col bg-gray-800 text-white p-8 m-7 rounded-2xl shadow-lg w-96 gap-6"
-      >
-        <div className="flex justify-between items-center mb-4">
-          <Link to="/filter" className="btn btn-sm bg-gray-600">
-            ← Home
-          </Link>
-          <h1 className="text-2xl font-bold">Log-in</h1>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-96">
+        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="tel"
+            name="phoneNumber"
+            placeholder="Phone Number"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="w-full p-2 mb-3 border rounded"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full p-2 mb-3 border rounded"
+            required
+          />
+          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            Login
+          </button>
+        </form>
+        <div className="mt-4 text-center">
+          <p>Don't have an account? <Link to="/users/signup" className="text-blue-500 hover:underline">Sign Up</Link></p>
         </div>
-
-        <label className="label">
-          <span className="label-text text-lg">Username:</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Enter username"
-          className="input input-bordered w-full text-black text-lg py-2"
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <label className="label">
-          <span className="label-text text-lg">Password:</span>
-        </label>
-        <input
-          type="password"
-          placeholder="Enter password"
-          className="input input-bordered text-black w-full text-lg py-2"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="submit" className="btn bg-green-700 mt-2 py-2 text-lg">
-          Submit
-        </button>
-      </form>
-      <Footer />
+      </div>
     </div>
   );
-
-}
+};
 
 export default Login;

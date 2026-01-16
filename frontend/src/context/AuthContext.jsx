@@ -1,33 +1,48 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check for token on mount
-        const token = localStorage.getItem("token");
-        if (token) {
-            setIsLoggedIn(true);
-        }
-        setLoading(false);
+        const checkAuth = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const res = await api.get("/auth/profile");
+                    setUser(res.data);
+                } catch (err) {
+                    localStorage.removeItem("token");
+                    setUser(null);
+                }
+            }
+            setLoading(false);
+        };
+        checkAuth();
     }, []);
 
-    const login = (token) => {
-        localStorage.setItem("token", token);
-        setIsLoggedIn(true);
+    const login = async (credentials) => {
+        const res = await api.post("/auth/login", credentials);
+        localStorage.setItem("token", res.data.token);
+        setUser(res.data.user);
+        return res.data;
+    };
+
+    const signup = async (userData) => {
+        await api.post("/auth/signup", userData);
     };
 
     const logout = () => {
         localStorage.removeItem("token");
-        setIsLoggedIn(false);
+        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout, loading }}>
-            {!loading && children}
+        <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+            {children}
         </AuthContext.Provider>
     );
 };

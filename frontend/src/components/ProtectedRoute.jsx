@@ -4,15 +4,19 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
-    const { isLoggedIn } = useAuth();
+    const { user, loading } = useAuth();
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (!loading && !user) {
             toast.error("Please login first to access this page");
         }
-    }, [isLoggedIn]);
+    }, [user, loading]);
 
-    if (!isLoggedIn) {
+    if (loading) {
+        return <div className="text-center p-10">Loading...</div>;
+    }
+
+    if (!user) {
         return <Navigate to="/users/login" replace />;
     }
 

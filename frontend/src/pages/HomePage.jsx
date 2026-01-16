@@ -1,112 +1,153 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import api from "../api/axios";
 
 const HomePage = () => {
   const navigate = useNavigate();
-
   const [search, setsearch] = useState("");
+  const [vehicles, setVehicles] = useState([]);
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  const fetchVehicles = async () => {
+    try {
+      const res = await api.get("/vehicles");
+      setVehicles(res.data.filter(v => !v.isDeleted));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handlesearch = (e) => {
     e.preventDefault();
-    try {
-      navigate(`/filter?search=${search}`)
-    } catch (error) {
-      toast.error("ERROR SEARCHING")
+    if (search.trim()) {
+      navigate(`/filter?search=${search}`);
     }
   }
 
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <Navbar />
 
-      {/* Hero Section */}
-      <div className="relative h-[600px] w-full bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop")' }}>
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+      {/* Hero Section - Royal Brothers Style */}
+      <div className="relative h-[600px] w-full bg-cover bg-center" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop")' }}>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
-        <div className="relative z-10 w-full max-w-4xl px-4 text-center text-white">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-xl animate-fade-in-down">
-            Rent. Ride. Explore.
-          </h1>
-          <p className="text-xl md:text-2xl mb-12 font-light text-gray-200 drop-shadow-md">
-            The smartest way to rent vehicles in your city.
-          </p>
+        <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-center">
+          <div className="max-w-2xl text-white mb-10">
+            <h1 className="text-6xl font-extrabold mb-4 leading-tight tracking-tight">
+              Bike Rentals <br /> <span className="text-yellow-400">Made Easy</span>
+            </h1>
+            <p className="text-xl text-gray-200 font-light mb-8">
+              Choose from a wide range of bikes for your daily commute or weekend getaway.
+              Standard rates, no hidden charges.
+            </p>
+          </div>
 
-          {/* Search Widget */}
-          <div className="bg-white p-2 rounded-full shadow-2xl max-w-2xl mx-auto flex items-center transform transition-all hover:scale-105">
-            <form onSubmit={handlesearch} className="flex w-full">
-              <div className="flex-grow flex items-center px-6 border-r border-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-400 mr-3">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
+          {/* Search Widget Overlay */}
+          <div className="bg-white p-6 rounded-lg shadow-2xl max-w-4xl grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div className="md:col-span-3">
+              <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Search City or Bike</label>
+              <div className="flex items-center border border-gray-300 rounded p-3 bg-gray-50 focus-within:ring-2 focus-within:ring-yellow-400">
+                <span className="text-gray-400 mr-2">📍</span>
                 <input
                   type="text"
-                  placeholder="Search for bikes (e.g., KTM, Classic 350)"
-                  className="w-full py-4 text-gray-800 text-lg placeholder-gray-400 bg-transparent focus:outline-none"
+                  placeholder="Search for bikes (e.g. Classic 350)"
+                  className="bg-transparent w-full focus:outline-none text-gray-800 font-semibold"
                   onChange={(e) => setsearch(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handlesearch(e)}
                 />
               </div>
-              <button type="submit" className="bg-primary hover:bg-primary-focus text-white px-8 py-3 rounded-full font-bold text-lg transition-colors duration-300 flex items-center gap-2 m-1">
-                Search
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </button>
-            </form>
+            </div>
+
+            <button
+              onClick={handlesearch}
+              className="bg-yellow-400 text-black font-bold py-3 px-6 rounded hover:bg-yellow-500 transition-colors shadow-md h-[50px] flex items-center justify-center uppercase tracking-wide"
+            >
+              Search Rides
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="py-20 bg-base-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-base-content">Why Choose Rental Buddy?</h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      {/* Featured Fleet Section */}
+      <div className="max-w-7xl mx-auto px-6 py-16 w-full">
+        <div className="flex justify-between items-end mb-10 border-b pb-4">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">Our Fleet</h2>
+            <p className="text-gray-500 mt-2">Choose from our diverse collection of well-maintained bikes</p>
           </div>
+          <Link to="/filter" className="text-blue-600 font-semibold hover:text-blue-800 flex items-center">
+            View All <span className="ml-2">→</span>
+          </Link>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Feature 1 */}
-            <div className="card bg-base-200 border border-base-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="card-body items-center text-center p-10">
-                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 text-primary">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                  </svg>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {vehicles.map((vehicle) => (
+            <div key={vehicle._id} className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group">
+              <div className="relative h-48 overflow-hidden bg-gray-100">
+                <img
+                  src={vehicle.images[0] || "https://via.placeholder.com/400x250"}
+                  alt={vehicle.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded shadow">
+                  {vehicle.location}
                 </div>
-                <h3 className="card-title text-2xl mb-3">Sanitized Vehicles</h3>
-                <p className="text-gray-500">Every vehicle is deeply sanitized and inspected before every ride.</p>
+              </div>
+
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-gray-800 mb-1">{vehicle.name}</h3>
+                <p className="text-gray-500 text-xs mb-4">By {vehicle.ownerId?.fullName}</p>
+
+                <div className="flex justify-between items-end mt-4">
+                  <div>
+                    <span className="text-gray-400 text-xs block">Daily Rate</span>
+                    <span className="text-xl font-bold text-gray-900">₹{vehicle.price}</span>
+                  </div>
+
+                  <Link
+                    to={`/${vehicle._id}`}
+                    className="bg-black text-white text-sm font-semibold px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+                  >
+                    Book Now
+                  </Link>
+                </div>
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* Feature 2 */}
-            <div className="card bg-base-200 border border-base-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="card-body items-center text-center p-10">
-                <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-6 text-secondary">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="card-title text-2xl mb-3">24/7 Support</h3>
-                <p className="text-gray-500">We are available around the clock to assist you with your journey.</p>
-              </div>
-            </div>
+        {vehicles.length === 0 && (
+          <div className="text-center py-20 bg-white rounded-lg border border-dashed">
+            <p className="text-gray-500 text-lg">No vehicles available at the moment.</p>
+            <p className="text-gray-400 text-sm mt-2">Check back later or try a different search.</p>
+          </div>
+        )}
+      </div>
 
-            {/* Feature 3 */}
-            <div className="card bg-base-200 border border-base-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="card-body items-center text-center p-10">
-                <div className="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center mb-6 text-accent">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                  </svg>
-                </div>
-                <h3 className="card-title text-2xl mb-3">Quality Assured</h3>
-                <p className="text-gray-500">Top-notch bikes and cars maintained by certified mechanics.</p>
-              </div>
-            </div>
+      {/* Features / Why Choose Us */}
+      <div className="bg-gray-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="p-6">
+            <div className="text-4xl mb-4">🛡️</div>
+            <h3 className="text-xl font-bold mb-2">Safe & Sanitized</h3>
+            <p className="text-gray-400">All bikes are sanitized before every ride for your safety.</p>
+          </div>
+          <div className="p-6">
+            <div className="text-4xl mb-4">🚀</div>
+            <h3 className="text-xl font-bold mb-2">Fast Booking</h3>
+            <p className="text-gray-400">Book your ride in less than 2 minutes with our seamless process.</p>
+          </div>
+          <div className="p-6">
+            <div className="text-4xl mb-4">💰</div>
+            <h3 className="text-xl font-bold mb-2">Transparent Pricing</h3>
+            <p className="text-gray-400">No hidden charges. What you see is what you pay.</p>
           </div>
         </div>
       </div>
@@ -114,8 +155,7 @@ const HomePage = () => {
       <Footer />
     </div>
   );
-
-}
+};
 
 export default HomePage;
 

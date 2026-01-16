@@ -19,7 +19,7 @@ const SearchPage = () => {
       try {
         const res = await axios.get(`https://bknd-4.onrender.com/filter?search=${query}`);
         console.log(res.data)
-        setCards(res.data)
+        setCards(res.data.filter(card => !card.isDeleted))
       } catch (error) {
         toast.error("counldnt get data")
       }

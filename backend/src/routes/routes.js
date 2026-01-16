@@ -1,29 +1,51 @@
-import express from "express"
-import { getCards, updateState,getById, filters } from "../routescontroller/customercontroller.js";
-import { adGetCards,adCreate,adUpdate,adDeleteCard, adGetByID } from "../routescontroller/admincontroller.js";
-import { login, showusers, signup } from "../routescontroller/authcontroller.js";
+import express from "express";
+import {
+    signup,
+    login,
+    getProfile,
+    updateProfile
+} from "../controllers/authController.js";
+import {
+    getAvailableVehicles,
+    createVehicle,
+    getMyVehicles,
+    getVehicleById,
+    updateVehicle,
+    deleteVehicle
+} from "../controllers/vehicleController.js";
+import {
+    bookVehicle,
+    returnVehicle,
+    getMyActiveRentals,
+    getMyRentalHistory,
+    getOwnerBookings
+} from "../controllers/rentalController.js";
+
 import { protect } from "../middleware/auth.js";
+import { validate } from "../middleware/validate.js";
+import { userSchema, loginSchema, vehicleSchema, rentalSchema } from "../validators/zodValidators.js";
 
-const routes=express.Router()
+const routes = express.Router();
 
-//admin routes
-routes.get("/admin",protect,adGetCards);
-routes.get("/admin/:id",protect,adGetByID);
-routes.post("/admin/create",protect,adCreate);
-routes.put("/admin/:id",protect,adUpdate);
-routes.delete("/admin/:id",protect,adDeleteCard);
+// Auth Routes
+routes.post("/auth/signup", validate(userSchema), signup);
+routes.post("/auth/login", validate(loginSchema), login);
+routes.get("/auth/profile", protect, getProfile);
+routes.put("/auth/profile", protect, updateProfile);
 
+// Vehicle Routes
+routes.get("/vehicles", getAvailableVehicles); // Public
+routes.get("/vehicles/my-listings", protect, getMyVehicles);
+routes.get("/vehicles/:id", getVehicleById); // Public/Protected
+routes.post("/vehicles", protect, validate(vehicleSchema), createVehicle);
+routes.put("/vehicles/:id", protect, updateVehicle);
+routes.delete("/vehicles/:id", protect, deleteVehicle);
 
-//customer routes
-routes.get("/",getCards);      
-routes.put("/:id",updateState);
-routes.get("/filter",filters);
-routes.get("/:id",getById);
+// Rental Routes
+routes.post("/rentals/book", protect, validate(rentalSchema), bookVehicle);
+routes.put("/rentals/:id/return", protect, returnVehicle);
+routes.get("/rentals/current", protect, getMyActiveRentals);
+routes.get("/rentals/history", protect, getMyRentalHistory);
+routes.get("/rentals/incoming", protect, getOwnerBookings);
 
-
-//auth routes
-routes.post("/user/signup",signup);
-routes.post("/user/login",login);
-routes.get("/user",protect,showusers);
-
-export default routes
+export default routes;

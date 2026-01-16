@@ -1,109 +1,131 @@
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router";
 import toast from "react-hot-toast";
-import { Link } from "react-router";
-import Footer from "../components/Footer";
-
-
+import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router";
+import Footer from "../components/Footer";
 
 const InfoPage = () => {
   const { id } = useParams();
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [card, setCard] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [ischanged, setIsChanged] = useState(false)
+  const [vehicle, setVehicle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [dates, setDates] = useState({ startDate: "", endDate: "" });
 
   useEffect(() => {
-    const fetchall = async () => {
+    const fetchVehicle = async () => {
       try {
-        const res = await axios.get(`https://bknd-4.onrender.com/${id}`);
-        setCard(res.data)                                                         //pe
+        const res = await api.get(`/vehicles/${id}`);
+        setVehicle(res.data);
       } catch (error) {
-        toast.error("errro getting card")
+        toast.error("Could not load vehicle details");
+      } finally {
+        setLoading(false);
       }
-      finally {
-        setLoading(false)
-      }
+    };
+    fetchVehicle();
+  }, [id]);
+
+  const handleBooking = async () => {
+    if (!user) {
+      toast.error("Please login to book");
+      navigate("/users/login");
+      return;
+    }
+    if (!dates.startDate || !dates.endDate) {
+      toast.error("Please select start and end dates");
+      return;
     }
 
-    fetchall()
-  }, [id])
-
-  const handlesubmit = async () => {
     try {
-      await axios.put(`https://bknd-4.onrender.com/${id}`, card);
-      if (ischanged) {
-        toast.success("Your Vehicle Has Been Booked")
-      }
-      else {
-
-      }
+      await api.post("/rentals/book", {
+        vehicleId: id,
+        startDate: dates.startDate,
+        endDate: dates.endDate
+      });
+      toast.success("Vehicle booked successfully!");
+      navigate("/dashboard");
     } catch (error) {
-      toast.error("could not update")
+      toast.error(error.response?.data?.message || "Booking failed");
     }
-  }
+  };
 
-  if (loading) {
-    return (<div>loading...</div>);
-  }
+  if (loading) return <div className="text-center p-10">Loading details...</div>;
+  if (!vehicle) return <div className="text-center p-10">Vehicle not found</div>;
 
   return (
-    <div className="min-h-screen p-6">
-      <Link to="/filter" className="btn mb-4">Back</Link>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="flex-grow p-6 container mx-auto">
+        <Link to="/" className="text-blue-500 hover:underline mb-4 inline-block">← Back to Home</Link>
 
-      <div className="bg-gray-800 text-white grid grid-cols-1 md:grid-cols-2 bg-base-300 p-6 rounded-lg max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+          <div className="h-96">
+            <img
+              src={vehicle.images?.[0] || "https://via.placeholder.com/600x400"}
+              alt={vehicle.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-        <div>
-          <img
-            src={card.image}
-            alt={card.name}
-            className="w-full h-80 object-cover rounded-lg"
-          />
-        </div>
+          <div className="p-8 flex flex-col justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-4">{vehicle.name}</h1>
+              <p className="text-xl text-gray-600 mb-2">Location: {vehicle.location}</p>
+              <p className="text-3xl text-green-600 font-bold mb-4">₹{vehicle.price}<span className="text-sm text-gray-500"> / day</span></p>
 
-        <div className="flex flex-col space-y-4 p-2">
-          <h1 className="text-3xl font-bold">{card.name}</h1>
+              <div className="divider my-4"></div>
 
-          <p className="text-lg">
-            <b>Location:</b> {card.location}
-          </p>
+              <div className="mb-6">
+                <h3 className="font-semibold mb-2">Select Rental Dates</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-gray-500">Start Date</label>
+                    <input
+                      type="date"
+                      className="border p-2 rounded w-full"
+                      value={dates.startDate}
+                      onChange={(e) => setDates({ ...dates, startDate: e.target.value })}
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-500">End Date</label>
+                    <input
+                      type="date"
+                      className="border p-2 rounded w-full"
+                      value={dates.endDate}
+                      onChange={(e) => setDates({ ...dates, endDate: e.target.value })}
+                      min={dates.startDate || new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <p className="text-lg">
-            <b>Price:</b> ₹{card.price}
-          </p>
+            {vehicle.isAvailable ? (
+              <button
+                onClick={handleBooking}
+                className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-xl hover:bg-blue-700 transition"
+              >
+                Book Now
+              </button>
+            ) : (
+              <button disabled className="w-full bg-gray-400 text-white py-4 rounded-lg font-bold text-xl cursor-not-allowed">
+                Currently Untitled/Rented
+              </button>
+            )}
 
-          <button className={`btn max-w-30 mx-auto p-5 ${card.booked ? "bg-red-500" : "bg-green-500"}`}
-            value={card.booked ? "true" : "false"}
-            onClick={() => {
-              if (!isLoggedIn) {
-                toast.error("Please login to book a vehicle");
-                navigate("/users/login");
-                return;
-              }
-              if (!card.booked) {
-                setCard({ ...card, booked: true })
-                setIsChanged(true);
-              }
-            }}>  {/* here */}
-            {card.booked ? "BOOKED" : "Available"}
-          </button>
-
-          <button onClick={handlesubmit}>
-            Finalize
-          </button>
+            {vehicle.ownerId && (
+              <p className="text-xs text-gray-400 mt-4 text-center">Owned by {vehicle.ownerId.fullName}</p>
+            )}
+          </div>
         </div>
       </div>
-      <div className="fixed bottom-0 left-0 w-full bg-black py-6">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };
 
-export default InfoPage
+export default InfoPage;
